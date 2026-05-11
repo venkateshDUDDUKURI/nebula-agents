@@ -88,6 +88,7 @@ Load in this order when the work is feature-scoped:
 - Hand-enumerating schemas, ADRs, or contract files when `lookup.py` output is available
 - Treating lookup/KG mappings as authoritative over raw artifacts
 - Editing code without prior `hint.py <path>`
+- Editing a bound method body without prior `lookup.py --symbol <name>` (or `hint.py --symbol <name>`)
 - Editing shared semantics without prior `blast.py <node-id>`
 - Continuing after a runtime-blocked failure without re-running runtime preflight
 - Skipping any gate from `G0` through `G4.7`
@@ -123,10 +124,11 @@ Run in this order:
 1. Applicable backend / frontend / AI / QE runtime commands for changed surfaces, with evidence paths recorded under `{PRODUCT_ROOT}/planning-mds/operations/evidence/**`
 2. `python3 agents/product-manager/scripts/validate-trackers.py`
 3. `python3 agents/product-manager/scripts/generate-story-index.py {PRODUCT_ROOT}/planning-mds/features/` when stories changed
-4. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --write-coverage-report` when KG changed
-5. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py`
-6. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --check-drift`
-7. `python3 agents/scripts/validate_templates.py`
+4. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --regenerate-symbols` when code in bound files changed
+5. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --write-coverage-report` when KG changed
+6. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --check-symbols`
+7. `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --check-drift`
+8. `python3 agents/scripts/validate_templates.py`
 
 ---
 
@@ -709,6 +711,7 @@ Before setting feature status to `Done` or moving to archive, verify role signof
    - Confirm implementation agents added `code-index.yaml` bindings for new source files created during the feature. If bindings are missing, add them now.
    - Run `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --check-drift` and resolve any errors before proceeding.
    - If the feature introduced new canonical nodes or rationale entries, confirm they are present in `canonical-nodes.yaml`.
+   - Regenerate and validate the symbol layer: `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --regenerate-symbols --check-symbols`. Editing a bound method body without first consulting `lookup.py --symbol` (or `hint.py --symbol`) is forbidden — the symbol-layer routing aid keeps edits narrow.
 
 **Completion Criteria:**
 - [ ] Product Manager closeout executed after signoff passed
@@ -717,6 +720,7 @@ Before setting feature status to `Done` or moving to archive, verify role signof
 - [ ] Ontology feature mapping updated if closeout changes feature path/status
 - [ ] Code-index bindings exist for new source files introduced by this feature
 - [ ] `validate.py --check-drift` exits 0
+- [ ] `validate.py --regenerate-symbols --check-symbols` exits 0
 
 ---
 

@@ -16,11 +16,13 @@ stages:
     required_gates:
       - boundary_genericness
       - skill_regression
+      - symbol_index_sync
   release-readiness:
     description: Public-release hardening stage with strict quality/security gate evidence.
     required_gates:
       - boundary_genericness
       - skill_regression
+      - symbol_index_sync
 gates:
   boundary_genericness:
     description: Prevent solution-specific leakage into generic framework agents.
@@ -32,3 +34,9 @@ gates:
     command:
       - python3
       - agents/scripts/run-skill-regression.py
+  symbol_index_sync:
+    description: Validate symbol-index.yaml is in sync with code-index bindings.
+    command:
+      - python3
+      - "{PRODUCT_ROOT}/scripts/kg/validate.py"
+      - --check-symbols

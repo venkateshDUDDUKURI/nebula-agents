@@ -949,6 +949,7 @@ Before Build Complete, verify required role signoffs across delivered features:
    - Confirm implementation agents added `code-index.yaml` bindings for new source files created during the build. If bindings are missing, add them now.
    - Run `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --check-drift` and resolve any errors before proceeding.
    - If the build introduced new canonical nodes or rationale entries, confirm they are present in `canonical-nodes.yaml`.
+   - Regenerate and validate the symbol layer: `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --regenerate-symbols --check-symbols`. Editing a bound method body without first consulting `lookup.py --symbol` (or `hint.py --symbol`) is forbidden — the symbol-layer routing aid keeps edits narrow.
 
 **Completion Criteria:**
 - [ ] Product Manager closeout executed after signoff passed
@@ -957,6 +958,7 @@ Before Build Complete, verify required role signoffs across delivered features:
 - [ ] Ontology feature mappings updated if closeout changes feature path/status
 - [ ] Code-index bindings exist for new source files introduced during this build
 - [ ] `validate.py --check-drift` exits 0
+- [ ] `validate.py --regenerate-symbols --check-symbols` exits 0
 
 ---
 

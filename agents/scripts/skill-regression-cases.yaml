@@ -49,3 +49,28 @@ cases:
   - id: devlog
     prompt: "Write a development blog post summarizing what changed and lessons learned."
     expected_skill: blogger
+
+# Content assertions — each entry requires the listed skill's SKILL.md to
+# contain the given substring. Use to lock in cross-skill guidance that
+# regressions could quietly delete.
+content_assertions:
+  - id: backend_symbol_lookup_bullet
+    skill: backend-developer
+    must_contain: "lookup.py --symbol"
+    rationale: Symbol-layer routing aid added during KG Phase 1
+  - id: frontend_symbol_lookup_bullet
+    skill: frontend-developer
+    must_contain: "lookup.py --symbol"
+    rationale: Symbol-layer routing aid added during KG Phase 1
+  - id: ai_engineer_symbol_lookup_bullet
+    skill: ai-engineer
+    must_contain: "lookup.py --symbol"
+    rationale: Symbol-layer routing aid added during KG Phase 1
+  - id: architect_symbol_regen_bullet
+    skill: architect
+    must_contain: "regenerate the symbol layer"
+    rationale: Symbol-layer regeneration cadence guidance added during KG Phase 1
+  - id: code_reviewer_symbol_sync_dimension
+    skill: code-reviewer
+    must_contain: "Knowledge-Graph & Symbol-Index Sync"
+    rationale: Symbol-index sync dimension added during KG Phase 1

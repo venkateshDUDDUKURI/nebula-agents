@@ -256,6 +256,12 @@ Flag when you see:
 - Verify `STORY-INDEX.md` reflects strict story files only (no non-story documents counted).
 - Missing tracker sync or stale links are at least **High** severity findings.
 
+### 11. Knowledge-Graph & Symbol-Index Sync
+- When the diff adds, renames, or removes a class, function, method, or property in a bound file, the symbol layer must be regenerated and re-validated (`python3 {PRODUCT_ROOT}/scripts/kg/validate.py --regenerate-symbols --check-symbols`).
+- If `{PRODUCT_ROOT}/planning-mds/knowledge-graph/symbol-index.yaml` is missing or stale relative to the diff, flag as **High** severity; reviewers should be able to look up new public methods via `lookup.py --symbol`.
+- Flag missing or dangling caller/callee references (existing symbols pointing at IDs that no longer resolve) — these signal partial regeneration.
+- Symbol-layer mismatches indicate the change skipped the routing-aid update; raw source still wins, but downstream agents lose the shortcut.
+
 ## Review Workflow
 
 ### Step 1: Gather Context

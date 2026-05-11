@@ -165,6 +165,10 @@ Your responsibility is to implement the **service layer** ({PRODUCT_ROOT}/engine
 When ontology coverage exists for the target feature or story, run
 `python3 {PRODUCT_ROOT}/scripts/kg/lookup.py <feature-or-story-id>` before broad repo reads.
 Use `--file <repo-path>` to reverse-map an existing code file back into the ontology.
+Also run `python3 {PRODUCT_ROOT}/scripts/kg/lookup.py --symbol <method-name>`
+(or `hint.py --symbol <name>`) before editing a bound method body — this returns
+the symbol record, callers, callees, and sibling symbols on the same canonical
+node, so the edit stays narrow and avoids re-reading the full file.
 
 **Tech Stack:**
 - **Framework:** C# / .NET 10

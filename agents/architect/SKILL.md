@@ -191,6 +191,12 @@ Use `--file <repo-path>` to reverse-map an existing code file back into the onto
 Treat ontology mappings as compressed retrieval context only; raw feature, glossary,
 ADR, API, and schema artifacts still win on conflict.
 
+After design sessions that introduce new aggregate methods or service operations,
+regenerate the symbol layer with `python3 {PRODUCT_ROOT}/scripts/kg/symbols.py`
+(or `validate.py --regenerate-symbols`) and confirm new symbols bind to the right
+canonical node via `lookup.py --symbol <method-name>`. The symbol layer is a
+retrieval aid; raw source remains authoritative.
+
 ## References
 
 Generic references in `agents/architect/references/` only. Solution-specific examples must live in `{PRODUCT_ROOT}/planning-mds/`.

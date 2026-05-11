@@ -47,6 +47,7 @@ The framework assumes these files exist under `{PRODUCT_ROOT}`:
 | `{PRODUCT_ROOT}/planning-mds/knowledge-graph/canonical-nodes.yaml` | Canonical entity → file binding |
 | `{PRODUCT_ROOT}/planning-mds/knowledge-graph/code-index.yaml` | Implementation-file index per entity |
 | `{PRODUCT_ROOT}/planning-mds/knowledge-graph/solution-ontology.yaml` | Role ownership per layer; consumed by `validate_templates.py` |
+| `{PRODUCT_ROOT}/planning-mds/knowledge-graph/symbol-index.yaml` | Symbol-level layer (methods, classes, functions) extracted from declared code paths. Required once product implementation has begun; omit during framework-bootstrap stage. |
 | `{PRODUCT_ROOT}/planning-mds/features/REGISTRY.md` | Authoritative feature registry |
 | `{PRODUCT_ROOT}/planning-mds/features/ROADMAP.md` | Active/planned feature sequencing |
 | `{PRODUCT_ROOT}/lifecycle-stage.yaml` | Product-local lifecycle gates (distinct from the framework-local file in this repo) |
@@ -124,7 +125,8 @@ A product's lifecycle file must declare each gate with an explicit `command:` li
 
 **Product-local validations** live in the product repo and must be runnable with no `agents/**` directory present:
 
-- `{PRODUCT_ROOT}/scripts/kg/validate.py` (knowledge-graph sync)
+- `{PRODUCT_ROOT}/scripts/kg/validate.py` (knowledge-graph sync; `--check-symbols` validates the symbol layer)
+- `{PRODUCT_ROOT}/scripts/kg/symbols.py` (symbol-index generator; invoked directly or via `validate.py --regenerate-symbols`)
 - `{PRODUCT_ROOT}/planning-mds/testing/validate-nebula-api-contract.py` (solution contract)
 - `{PRODUCT_ROOT}/planning-mds/testing/validate-frontend-quality-gate.py` (frontend quality)
 - Additional product-local equivalents for `api_contract`, `infra_strict`, `security_planning_strict` as each product matures

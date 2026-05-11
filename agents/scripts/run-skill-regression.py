@@ -353,6 +353,55 @@ def validate_routing(skills: List[Skill], cases_path: Path, errors: List[str]) -
         )
 
 
+def validate_content_assertions(
+    skills: List[Skill], cases_path: Path, errors: List[str]
+) -> None:
+    """Verify each SKILL.md contains the substrings declared in content_assertions.
+
+    Use to lock in cross-skill guidance (routing hints, mandatory cadences,
+    review dimensions) that an unrelated edit could quietly delete.
+    """
+    if not cases_path.exists():
+        return
+    try:
+        cases_data = yaml.safe_load(cases_path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError:
+        return
+    assertions = cases_data.get("content_assertions")
+    if not assertions:
+        return
+    if not isinstance(assertions, list):
+        errors.append(f"{cases_path}: 'content_assertions' must be a list")
+        return
+
+    skills_by_folder = {s.folder: s for s in skills}
+    for entry in assertions:
+        if not isinstance(entry, dict):
+            errors.append(
+                f"{cases_path}: content_assertion must be a mapping, got '{entry}'"
+            )
+            continue
+        ident = entry.get("id", "<unknown>")
+        skill_name = str(entry.get("skill", "")).strip()
+        must_contain = entry.get("must_contain")
+        if not skill_name or not must_contain:
+            errors.append(
+                f"{cases_path}: content_assertion '{ident}' requires 'skill' and 'must_contain'"
+            )
+            continue
+        skill = skills_by_folder.get(skill_name)
+        if skill is None:
+            errors.append(
+                f"{cases_path}: content_assertion '{ident}' references unknown skill '{skill_name}'"
+            )
+            continue
+        if must_contain not in skill.body:
+            errors.append(
+                f"{cases_path}: content_assertion '{ident}' missing in {skill.path}: "
+                f"expected substring not found: {must_contain!r}"
+            )
+
+
 def discover_skills(skills_dir: Path, errors: List[str]) -> List[Skill]:
     skills = []
     for path in sorted(skills_dir.glob("*/SKILL.md")):
@@ -413,6 +462,7 @@ def main() -> int:
 
     if not any("failed to parse SKILL.md" in error for error in errors):
         validate_routing(skills, cases_path, errors)
+        validate_content_assertions(skills, cases_path, errors)
 
     if errors:
         print("[FAIL] Skill regression checks failed:")

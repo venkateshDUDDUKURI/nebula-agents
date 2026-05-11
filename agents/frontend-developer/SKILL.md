@@ -203,6 +203,7 @@ Your responsibility is to implement the **user-facing layer** ({PRODUCT_ROOT}/ex
 When ontology coverage exists for the target feature or story, run
 `python3 {PRODUCT_ROOT}/scripts/kg/lookup.py <feature-or-story-id>` before broad repo reads.
 Use `--file <repo-path>` to reverse-map an existing code file back into the ontology.
+Also run `lookup.py --symbol <name>` (or `hint.py --symbol <name>`) before editing a bound function or component — returns the symbol record plus callers, callees, and siblings so edits stay narrow.
 
 **Tech Stack:**
 - **Framework:** React 18 + TypeScript
