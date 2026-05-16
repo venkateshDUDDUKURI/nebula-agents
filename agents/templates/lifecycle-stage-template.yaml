@@ -25,6 +25,7 @@ stages:
       - skill_regression
       - symbol_index_sync
       - inline_decisions_check
+      - kg_orphan_check
 gates:
   boundary_genericness:
     description: Prevent solution-specific leakage into generic framework agents.
@@ -48,3 +49,13 @@ gates:
       - python3
       - "{PRODUCT_ROOT}/scripts/kg/validate.py"
       - --check-decisions
+  kg_orphan_check:
+    description: |
+      Warn on canonical nodes with no incoming refs and no code-index binding
+      (ontology orphans), and report symbol-level dead-code candidates at high
+      confidence. Cleanup gate run at release readiness; raw source remains
+      authoritative.
+    command:
+      - python3
+      - "{PRODUCT_ROOT}/scripts/kg/validate.py"
+      - --check-orphans

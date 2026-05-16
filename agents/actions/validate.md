@@ -181,6 +181,12 @@ Execute these validation agents **in parallel**. The user specifies scope: `requ
    - [ ] Domain entities match architecture
    - [ ] No architectural drift
 
+   **Ontology Hygiene (release-readiness scope):**
+   - [ ] `python3 {PRODUCT_ROOT}/scripts/kg/validate.py --check-orphans` reports zero unresolved ontology orphans — each canonical node either has an incoming feature-mapping reference, a code-index binding, or an explicit exemption
+   - [ ] `python3 {PRODUCT_ROOT}/scripts/kg/dead-code.py --safe-only` candidates have been triaged: each is either removed, wired up to an entry point, or flagged as a same-node-resolution false positive with a one-line justification
+   - [ ] Any new orphans introduced since the previous release are explained in the validation report (premature node vs. missing binding vs. intentional placeholder)
+   - Reference: `agents/architect/references/dead-code-review-guide.md`
+
 4. **Produce architecture validation report:**
    ```markdown
    # Architecture Validation Report
